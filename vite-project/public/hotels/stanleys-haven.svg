@@ -1,0 +1,25 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#81C784;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#388E3C;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#grad1)"/>
+  <rect x="40" y="80" width="320" height="170" fill="#D7CCC8" stroke="#795548" stroke-width="2"/>
+  <polygon points="40,80 200,20 360,80" fill="#A1887F" stroke="#795548" stroke-width="2"/>
+  <circle cx="70" cy="120" r="12" fill="#64B5F6"/>
+  <circle cx="130" cy="110" r="14" fill="#64B5F6"/>
+  <circle cx="190" cy="115" r="13" fill="#64B5F6"/>
+  <circle cx="250" cy="110" r="14" fill="#64B5F6"/>
+  <circle cx="310" cy="120" r="12" fill="#64B5F6"/>
+  <circle cx="90" cy="140" r="20" fill="#2E7D32"/>
+  <circle cx="140" cy="135" r="22" fill="#2E7D32"/>
+  <circle cx="190" cy="138" r="20" fill="#2E7D32"/>
+  <circle cx="240" cy="135" r="22" fill="#2E7D32"/>
+  <circle cx="290" cy="140" r="20" fill="#2E7D32"/>
+  <rect x="60" y="180" width="50" height="60" fill="#1565C0" stroke="#333" stroke-width="1"/>
+  <rect x="150" y="180" width="50" height="60" fill="#1565C0" stroke="#333" stroke-width="1"/>
+  <rect x="240" y="180" width="50" height="60" fill="#1565C0" stroke="#333" stroke-width="1"/>
+  <text x="200" y="280" font-size="18" font-weight="bold" text-anchor="middle" fill="#333">Stanley's Haven</text>
+</svg>
