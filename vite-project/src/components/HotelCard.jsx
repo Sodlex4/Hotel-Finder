@@ -3,59 +3,60 @@ export default function HotelCard({ hotel, onClick }) {
     <div
       onClick={onClick}
       style={{
-        border: "1px solid #ddd",
-        borderRadius: "8px",
+        borderRadius: "10px",
         overflow: "hidden",
-        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+        boxShadow: "0 6px 18px rgba(25, 118, 210, 0.08)",
         cursor: "pointer",
-        transition: "all 0.3s ease",
+        transition: "transform 0.18s ease, box-shadow 0.18s ease",
         backgroundColor: "#fff",
+        display: "flex",
+        flexDirection: "column",
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = "0 8px 12px rgba(0,0,0,0.15)";
-        e.currentTarget.style.transform = "translateY(-4px)";
+        e.currentTarget.style.boxShadow = "0 14px 30px rgba(25, 118, 210, 0.12)";
+        e.currentTarget.style.transform = "translateY(-6px)";
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
+        e.currentTarget.style.boxShadow = "0 6px 18px rgba(25, 118, 210, 0.08)";
         e.currentTarget.style.transform = "translateY(0)";
       }}
     >
-      <img
-        src={hotel.image}
-        alt={hotel.name}
-        style={{ width: "100%", height: "140px", objectFit: "cover" }}
-      />
-      <div style={{ padding: "12px" }}>
-        <h3 style={{ margin: "0 0 6px 0", color: "#333", fontSize: "15px", fontWeight: "600" }}>
-          {hotel.name}
-        </h3>
-        
-        <div style={{ marginBottom: "6px", fontSize: "13px", color: "#FF9800" }}>
-          {hotel.rating} ({hotel.reviews} reviews)
+      <div style={{ width: "100%", height: "160px", overflow: "hidden" }}>
+        <img
+          src={hotel.image}
+          alt={hotel.name}
+          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+        />
+      </div>
+
+      <div style={{ padding: "14px 14px 16px 14px", display: "flex", flexDirection: "column", gap: "8px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "8px" }}>
+          <h3 style={{ margin: 0, color: "#222", fontSize: "16px", fontWeight: 700 }}>{hotel.name}</h3>
+          <div style={{ textAlign: "right" }}>
+            <div style={{ fontSize: "13px", color: "#FF9800", fontWeight: 700 }}>{hotel.rating}</div>
+            <div style={{ fontSize: "11px", color: "#777" }}>{hotel.reviews} reviews</div>
+          </div>
         </div>
 
-        <div style={{ marginBottom: "6px", fontSize: "13px", fontWeight: "600", color: "#2196F3" }}>
-          {hotel.price}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ color: "#1976D2", fontWeight: 700 }}>{hotel.price}</div>
+          <div style={{ fontSize: "12px", color: "#888" }}>{hotel.distance}</div>
         </div>
 
-        <div style={{ marginBottom: "6px", fontSize: "12px", color: "#888" }}>
-          {hotel.distance}
-        </div>
+        <div style={{ fontSize: "12px", color: "#555" }}>Lat: {hotel.lat}, Lng: {hotel.lng}</div>
 
-        <p style={{ marginBottom: "8px", fontSize: "11px", color: "#666", lineHeight: "1.4", margin: "8px 0" }}>
-          {hotel.description}
-        </p>
+        <p style={{ margin: 0, fontSize: "13px", color: "#555", lineHeight: 1.35 }}>{hotel.description}</p>
 
-        <div style={{ marginBottom: "10px", display: "flex", flexWrap: "wrap", gap: "4px" }}>
+        <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "6px" }}>
           {hotel.amenities.slice(0, 3).map((amenity, idx) => (
             <span
               key={idx}
               style={{
-                fontSize: "10px",
-                backgroundColor: "#E3F2FD",
+                fontSize: "11px",
+                backgroundColor: "#eef6ff",
                 color: "#1976D2",
-                padding: "3px 6px",
-                borderRadius: "3px",
+                padding: "6px 8px",
+                borderRadius: "14px",
               }}
             >
               {amenity}
@@ -72,19 +73,19 @@ export default function HotelCard({ hotel, onClick }) {
             );
           }}
           style={{
+            marginTop: "10px",
             width: "100%",
-            padding: "8px",
-            backgroundColor: "#2196F3",
+            padding: "10px",
+            backgroundColor: "#1976D2",
             color: "white",
             border: "none",
-            borderRadius: "4px",
+            borderRadius: "8px",
             cursor: "pointer",
-            fontSize: "13px",
-            fontWeight: "600",
-            transition: "background-color 0.2s",
+            fontSize: "14px",
+            fontWeight: 700,
           }}
-          onMouseEnter={(e) => (e.target.style.backgroundColor = "#1976D2")}
-          onMouseLeave={(e) => (e.target.style.backgroundColor = "#2196F3")}
+          onMouseEnter={(e) => (e.target.style.backgroundColor = "#165fbd")}
+          onMouseLeave={(e) => (e.target.style.backgroundColor = "#1976D2")}
         >
           Get Directions
         </button>

@@ -48,7 +48,14 @@ export default function MapView({ selectedHotel }) {
               position={[hotel.lat, hotel.lng]}
               title={hotel.name}
             >
-              <Popup>{hotel.name}</Popup>
+              <Popup>
+                <div style={{ fontSize: "13px" }}>
+                  <strong>{hotel.name}</strong>
+                  <div style={{ fontSize: "12px", color: "#555" }}>
+                    Lat: {hotel.lat}, Lng: {hotel.lng}
+                  </div>
+                </div>
+              </Popup>
             </Marker>
           ))}
         </MapContainer>
@@ -81,7 +88,14 @@ export default function MapView({ selectedHotel }) {
           position={[hotel.lat, hotel.lng]}
           title={hotel.name}
         >
-          <Popup>{hotel.name}</Popup>
+          <Popup>
+            <div style={{ fontSize: "13px" }}>
+              <strong>{hotel.name}</strong>
+              <div style={{ fontSize: "12px", color: "#555" }}>
+                Lat: {hotel.lat}, Lng: {hotel.lng}
+              </div>
+            </div>
+          </Popup>
         </Marker>
       ))}
     </MapContainer>

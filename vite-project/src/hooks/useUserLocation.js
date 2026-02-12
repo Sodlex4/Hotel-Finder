@@ -15,7 +15,7 @@ export function useUserLocation() {
     if (!navigator.geolocation) {
       if (isMounted) {
         setTimeout(() => {
-          if (isMounted) {
+          if (isMounted) { 
             setError("Geolocation not supported.");
             setLocation(defaultLocation);
             setUsingDefault(true);
