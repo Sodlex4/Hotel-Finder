@@ -93,7 +93,10 @@ export default function HotelCard({ hotel }) {
                 <h2>{hotel.name}</h2>
                 <p className="modal-price">Price: <strong>${hotel.price}</strong></p>
                 <p className="modal-rating">Rating: <strong>⭐ {hotel.rating}</strong></p>
-                <p className="modal-phone">Phone: <a href={`tel:${hotel.phone}`}>{hotel.phone}</a></p>
+                <p className="modal-phone">📞 <a href={`tel:${hotel.phone}`}>{hotel.phone}</a></p>
+                {hotel.email && <p className="modal-email">✉️ <a href={`mailto:${hotel.email}`}>{hotel.email}</a></p>}
+                {hotel.checkin && <p className="modal-checkin">Check-in: <strong>{hotel.checkin}</strong></p>}
+                {hotel.checkout && <p className="modal-checkout">Check-out: <strong>{hotel.checkout}</strong></p>}
 
                 <div className="modal-amenities">
                   <h4>Amenities</h4>

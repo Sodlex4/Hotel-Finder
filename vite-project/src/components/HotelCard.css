@@ -165,6 +165,7 @@
   padding: 18px;
   height: 100%;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .modal-gallery {
@@ -194,30 +195,89 @@
 .modal-info {
   padding: 6px 0;
   overflow-y: auto;
+  font-size: 14px;
 }
 
-.modal-info h2 { margin-top: 0; }
+.modal-info h2 { 
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+}
 
-.modal-price, .modal-rating, .modal-phone { margin: 6px 0; }
+.modal-info h4 {
+  margin: 8px 0 6px 0;
+  font-size: 0.95rem;
+}
+
+.modal-price, .modal-rating, .modal-phone, .modal-email, .modal-checkin, .modal-checkout { margin: 6px 0; font-size: 13px; }
+
+.modal-phone a, .modal-email a { color: #2563eb; text-decoration: none; }
+.modal-phone a:hover, .modal-email a:hover { text-decoration: underline; }
 
 .modal-amenities ul {
   padding-left: 18px;
   margin: 6px 0;
+  list-style: disc;
+}
+
+.modal-amenities li {
+  margin: 3px 0;
+  font-size: 13px;
 }
 
 /* Responsive */
-@media (max-width: 880px) {
+@media (max-width: 900px) {
   .modal-grid {
     grid-template-columns: 1fr;
   }
   .modal-gallery {
     grid-template-columns: repeat(2, 1fr);
+    max-height: 300px;
+    margin-bottom: 12px;
+  }
+  .modal-info {
+    max-height: auto;
   }
   .card-media { height: 180px; }
 }
 
-@media (max-width: 480px) {
-  .modal-gallery { grid-template-columns: 1fr; }
+@media (max-width: 600px) {
+  .modal-overlay {
+    padding: 10px;
+  }
+  .modal-content {
+    border-radius: 8px;
+    max-height: 95vh;
+  }
+  .modal-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 12px;
+  }
+  .modal-gallery { 
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    max-height: 280px;
+  }
+  .modal-image-wrap {
+    aspect-ratio: 16/12;
+  }
+  .modal-close {
+    right: 8px;
+    top: 8px;
+    font-size: 24px;
+  }
+  .modal-info {
+    padding: 0;
+  }
+  .modal-info h2 { font-size: 1.15rem; }
+  .modal-price, .modal-rating, .modal-phone { font-size: 12px; }
+  .modal-amenities li { font-size: 12px; }
   .card-media { height: 160px; }
   .arrow { width: 32px; height: 32px; font-size: 18px; }
+}
+
+@media (max-width: 380px) {
+  .modal-gallery { grid-template-columns: 1fr; }
+  .modal-info h2 { font-size: 1rem; }
 }
