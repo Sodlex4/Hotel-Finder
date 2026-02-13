@@ -1,95 +1,113 @@
-export default function HotelCard({ hotel, onClick }) {
+import React, { useEffect, useRef, useState, useMemo } from 'react'
+import './HotelCard.css'
+
+export default function HotelCard({ hotel }) {
+  const images = useMemo(() => hotel.images || [], [hotel.images])
+  const [current, setCurrent] = useState(0)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const intervalRef = useRef(null)
+
+  const prev = () => setCurrent((c) => (c - 1 + images.length) % images.length)
+  const next = () => setCurrent((c) => (c + 1) % images.length)
+
+  useEffect(() => {
+    // autoplay every 4s; cleaned up when images change or unmount
+    if (images.length <= 1) return undefined
+    intervalRef.current = setInterval(() => {
+      setCurrent((c) => (c + 1) % images.length)
+    }, 4000)
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
+    }
+  }, [images])
+
+  // manual navigation resets the interval for a fresh 4s
+  const handleManualNav = (navFn) => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
+    }
+    navFn()
+    if (images.length > 1) {
+      intervalRef.current = setInterval(() => setCurrent((c) => (c + 1) % images.length), 4000)
+    }
+  }
+
   return (
-    <div
-      onClick={onClick}
-      style={{
-        borderRadius: "10px",
-        overflow: "hidden",
-        boxShadow: "0 6px 18px rgba(25, 118, 210, 0.08)",
-        cursor: "pointer",
-        transition: "transform 0.18s ease, box-shadow 0.18s ease",
-        backgroundColor: "#fff",
-        display: "flex",
-        flexDirection: "column",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = "0 14px 30px rgba(25, 118, 210, 0.12)";
-        e.currentTarget.style.transform = "translateY(-6px)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = "0 6px 18px rgba(25, 118, 210, 0.08)";
-        e.currentTarget.style.transform = "translateY(0)";
-      }}
-    >
-      <div style={{ width: "100%", height: "160px", overflow: "hidden" }}>
-        <img
-          src={hotel.image}
-          alt={hotel.name}
-          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-        />
+    <div className="hotel-card">
+      <div className="card-media">
+        {images.length > 0 ? (
+          <div className="carousel">
+            <button className="arrow left" aria-label="Previous image" onClick={() => handleManualNav(prev)}>‹</button>
+
+            <img
+              src={images[current]}
+              alt={`${hotel.name} ${current + 1}`}
+              className="carousel-image"
+            />
+
+            <button className="arrow right" aria-label="Next image" onClick={() => handleManualNav(next)}>›</button>
+          </div>
+        ) : (
+          <div className="no-image">No image</div>
+        )}
       </div>
 
-      <div style={{ padding: "14px 14px 16px 14px", display: "flex", flexDirection: "column", gap: "8px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "8px" }}>
-          <h3 style={{ margin: 0, color: "#222", fontSize: "16px", fontWeight: 700 }}>{hotel.name}</h3>
-          <div style={{ textAlign: "right" }}>
-            <div style={{ fontSize: "13px", color: "#FF9800", fontWeight: 700 }}>{hotel.rating}</div>
-            <div style={{ fontSize: "11px", color: "#777" }}>{hotel.reviews} reviews</div>
-          </div>
+      <div className="card-body">
+        <h3 className="hotel-name">{hotel.name}</h3>
+        <div className="hotel-meta">
+          <span className="price">${hotel.price}</span>
+          <span className="rating">⭐ {hotel.rating}</span>
         </div>
 
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ color: "#1976D2", fontWeight: 700 }}>{hotel.price}</div>
-          <div style={{ fontSize: "12px", color: "#888" }}>{hotel.distance}</div>
-        </div>
-
-        <div style={{ fontSize: "12px", color: "#555" }}>Lat: {hotel.lat}, Lng: {hotel.lng}</div>
-
-        <p style={{ margin: 0, fontSize: "13px", color: "#555", lineHeight: 1.35 }}>{hotel.description}</p>
-
-        <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "6px" }}>
-          {hotel.amenities.slice(0, 3).map((amenity, idx) => (
-            <span
-              key={idx}
-              style={{
-                fontSize: "11px",
-                backgroundColor: "#eef6ff",
-                color: "#1976D2",
-                padding: "6px 8px",
-                borderRadius: "14px",
-              }}
-            >
-              {amenity}
-            </span>
+        <div className="amenities">
+          {(hotel.amenities || []).slice(0, 5).map((a, i) => (
+            <span className="amenity" key={a + i}>{a}</span>
           ))}
         </div>
 
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            window.open(
-              `https://www.google.com/maps/dir/?api=1&destination=${hotel.lat},${hotel.lng}`,
-              "_blank"
-            );
-          }}
-          style={{
-            marginTop: "10px",
-            width: "100%",
-            padding: "10px",
-            backgroundColor: "#1976D2",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            cursor: "pointer",
-            fontSize: "14px",
-            fontWeight: 700,
-          }}
-          onMouseEnter={(e) => (e.target.style.backgroundColor = "#165fbd")}
-          onMouseLeave={(e) => (e.target.style.backgroundColor = "#1976D2")}
-        >
-          Get Directions
-        </button>
+        <div className="card-actions">
+          <button className="details-btn" onClick={() => setIsModalOpen(true)}>View Details</button>
+        </div>
       </div>
+
+      {isModalOpen && (
+        <div className="modal-overlay" role="dialog" aria-modal="true" onClick={(e) => { if (e.target === e.currentTarget) setIsModalOpen(false) }}>
+          <div className="modal-content">
+            <button className="modal-close" aria-label="Close modal" onClick={() => setIsModalOpen(false)}>×</button>
+
+            <div className="modal-grid">
+              <div className="modal-gallery">
+                {(images || []).map((src, idx) => (
+                  <div className="modal-image-wrap" key={src + idx}>
+                    <img src={src} alt={`${hotel.name} ${idx + 1}`} className="modal-image" />
+                  </div>
+                ))}
+              </div>
+
+              <div className="modal-info">
+                <h2>{hotel.name}</h2>
+                <p className="modal-price">Price: <strong>${hotel.price}</strong></p>
+                <p className="modal-rating">Rating: <strong>⭐ {hotel.rating}</strong></p>
+                <p className="modal-phone">Phone: <a href={`tel:${hotel.phone}`}>{hotel.phone}</a></p>
+
+                <div className="modal-amenities">
+                  <h4>Amenities</h4>
+                  <ul>
+                    {(hotel.amenities || []).map((amenity, i) => (
+                      <li key={amenity + i}>{amenity}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
-  );
+  )
 }
