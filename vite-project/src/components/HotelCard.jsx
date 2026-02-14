@@ -79,7 +79,7 @@ export default function HotelCard({ hotel, onClick, userLocation }) {
       <div className="card-body">
         <h3 className="hotel-name">{hotel.name}</h3>
         <div className="hotel-meta">
-          <span className="price">${hotel.price}</span>
+          <span className="price">KES {hotel.price?.toLocaleString()}</span>
           <span className="rating">⭐ {hotel.rating}</span>
         </div>
 
@@ -139,7 +139,7 @@ export default function HotelCard({ hotel, onClick, userLocation }) {
 
               <div className="modal-info">
                 <h2>{hotel.name}</h2>
-                <p className="modal-price">Price: <strong>${hotel.price}</strong></p>
+                <p className="modal-price">Price: <strong>KES {hotel.price?.toLocaleString()}</strong></p>
                 <p className="modal-rating">Rating: <strong>⭐ {hotel.rating}</strong></p>
                 <p className="modal-phone">📞 <a href={`tel:${hotel.phone}`}>{hotel.phone}</a></p>
                 {hotel.email && <p className="modal-email">✉️ <a href={`mailto:${hotel.email}`}>{hotel.email}</a></p>}
