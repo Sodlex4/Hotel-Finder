@@ -2,9 +2,11 @@ import { useState } from "react";
 import MapView from "./components/MapView";
 import HotelList from "./components/HotelList";
 import { hotels } from "./data/hotels";
+import { useUserLocation } from "./hooks/useUserLocation";
 
 function App() {
   const [selectedHotel, setSelectedHotel] = useState(null);
+  const { location } = useUserLocation();
 
   return (
     <div style={{
@@ -36,7 +38,7 @@ function App() {
         padding: "20px"
       }}>
         <MapView selectedHotel={selectedHotel} />
-        <HotelList hotels={hotels} onSelectHotel={setSelectedHotel} />
+        <HotelList hotels={hotels} onSelectHotel={setSelectedHotel} userLocation={location} />
       </div>
     </div>
   );

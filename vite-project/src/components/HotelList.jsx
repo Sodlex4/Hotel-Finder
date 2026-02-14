@@ -1,7 +1,7 @@
 import HotelCard from "./HotelCard";
 import { useMemo, useState } from "react";
 
-export default function HotelList({ hotels, onSelectHotel }) {
+export default function HotelList({ hotels, onSelectHotel, userLocation }) {
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState({
     price: false,
@@ -126,6 +126,7 @@ export default function HotelList({ hotels, onSelectHotel }) {
             key={hotel.id}
             hotel={hotel}
             onClick={() => onSelectHotel(hotel)}
+            userLocation={userLocation}
           />
         ))}
       </div>

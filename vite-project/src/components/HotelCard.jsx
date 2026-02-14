@@ -1,11 +1,30 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react'
 import './HotelCard.css'
 
-export default function HotelCard({ hotel }) {
+// Haversine formula to calculate distance between two coordinates (in km)
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // Earth's radius in kilometers
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+export default function HotelCard({ hotel, onClick, userLocation }) {
   const images = useMemo(() => hotel.images || [], [hotel.images])
   const [current, setCurrent] = useState(0)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const intervalRef = useRef(null)
+
+  const distance = useMemo(() => {
+    if (userLocation && userLocation.lat && userLocation.lng) {
+      return calculateDistance(userLocation.lat, userLocation.lng, hotel.lat, hotel.lng)
+    }
+    return null
+  }, [userLocation, hotel])
 
   const prev = () => setCurrent((c) => (c - 1 + images.length) % images.length)
   const next = () => setCurrent((c) => (c + 1) % images.length)
@@ -71,7 +90,17 @@ export default function HotelCard({ hotel }) {
         </div>
 
         <div className="card-actions">
-          <button className="details-btn" onClick={() => setIsModalOpen(true)}>View Details</button>
+          <button className="details-btn" onClick={() => { setIsModalOpen(true); onClick && onClick(hotel); }}>View Details</button>
+          <button 
+            className="direction-btn" 
+            onClick={() => {
+              const url = `https://www.google.com/maps/search/${encodeURIComponent(hotel.name)}/@${hotel.lat},${hotel.lng},15z`;
+              window.open(url, '_blank');
+            }}
+            title={distance ? `${distance.toFixed(1)} km away` : "Get directions"}
+          >
+            📍 {distance ? `${distance.toFixed(1)} km` : 'Directions'}
+          </button>
         </div>
       </div>
 
@@ -82,11 +111,30 @@ export default function HotelCard({ hotel }) {
 
             <div className="modal-grid">
               <div className="modal-gallery">
-                {(images || []).map((src, idx) => (
-                  <div className="modal-image-wrap" key={src + idx}>
-                    <img src={src} alt={`${hotel.name} ${idx + 1}`} className="modal-image" />
-                  </div>
-                ))}
+                <div className="modal-carousel">
+                  {images.length > 0 && (
+                    <>
+                      <button 
+                        className="modal-arrow left" 
+                        aria-label="Previous image"
+                        onClick={() => setCurrent((c) => (c - 1 + images.length) % images.length)}
+                      >
+                        ‹
+                      </button>
+                      <div className="modal-image-wrap">
+                        <img src={images[current]} alt={`${hotel.name} ${current + 1}`} className="modal-image" />
+                      </div>
+                      <button 
+                        className="modal-arrow right" 
+                        aria-label="Next image"
+                        onClick={() => setCurrent((c) => (c + 1) % images.length)}
+                      >
+                        ›
+                      </button>
+                      <div className="modal-carousel-counter">{current + 1} / {images.length}</div>
+                    </>
+                  )}
+                </div>
               </div>
 
               <div className="modal-info">
