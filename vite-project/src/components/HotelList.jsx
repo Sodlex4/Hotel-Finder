@@ -1,7 +1,10 @@
 import HotelCard from "./HotelCard";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { fetchHotels } from "../utils/hotelService";
 
-export default function HotelList({ hotels, onSelectHotel, userLocation }) {
+export default function HotelList({ hotels: initialHotels, onSelectHotel, userLocation }) {
+  const [hotels, setHotels] = useState(initialHotels || []);
+  const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState({
     price: false,
@@ -9,6 +12,31 @@ export default function HotelList({ hotels, onSelectHotel, userLocation }) {
     rating: false,
     wifi: false,
   });
+
+  // Fetch hotels from Supabase on component mount
+  useEffect(() => {
+    const loadHotels = async () => {
+      setLoading(true);
+      try {
+        const supabaseHotels = await fetchHotels();
+        if (supabaseHotels.length > 0) {
+          setHotels(supabaseHotels);
+        } else if (initialHotels) {
+          setHotels(initialHotels);
+        }
+      } catch (error) {
+        console.error("Failed to load hotels from Supabase:", error);
+        // Fallback to initial hotels if Supabase fails
+        if (initialHotels) {
+          setHotels(initialHotels);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadHotels();
+  }, [initialHotels]);
 
   const toggleFilter = (key) => {
     setFilters((f) => ({ ...f, [key]: !f[key] }));
@@ -52,10 +80,20 @@ export default function HotelList({ hotels, onSelectHotel, userLocation }) {
   return (
     <div style={{ marginTop: "20px" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
-        <h2 style={{ fontSize: "18px", color: "#333", margin: 0 }}>Available Hotels</h2>
-        <div style={{ fontSize: "13px", color: "#666" }}>{filtered.length} results</div>
+        <h2 style={{ fontSize: "18px", color: "#333", margin: 0 }}>
+          {loading ? "Loading Hotels..." : "Available Hotels"}
+        </h2>
+        <div style={{ fontSize: "13px", color: "#666" }}>
+          {loading ? "..." : `${filtered.length} results`}
+        </div>
       </div>
 
+      {loading ? (
+        <div style={{ textAlign: "center", padding: "20px", color: "#999" }}>
+          <p>Fetching hotels from Supabase...</p>
+        </div>
+      ) : (
+        <>
       <div style={{ display: "flex", gap: "8px", marginBottom: "8px", alignItems: "center", flexDirection: "column" }}>
         <div style={{ display: "flex", width: "100%", gap: "8px" }}>
           <input
@@ -130,6 +168,8 @@ export default function HotelList({ hotels, onSelectHotel, userLocation }) {
           />
         ))}
       </div>
+        </>
+      )}
     </div>
   );
 }

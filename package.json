@@ -1,0 +1,9 @@
+{
+  "name": "hotel-finder-map-root",
+  "private": true,
+  "scripts": {
+    "dev": "cd vite-project && npm run dev",
+    "install": "cd vite-project && npm install",
+    "build": "cd vite-project && npm run build"
+  }
+}
